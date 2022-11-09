@@ -1,13 +1,9 @@
 package com.example.demo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,9 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.*;
-import java.io.FileWriter;
-import java.io.Writer;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 @SpringBootApplication
@@ -35,6 +30,16 @@ public class DemoApplication {
 
 
 
+		@GetMapping("/extract")
+		public Map<Element,String> extract(@RequestParam(value = "url", defaultValue = "") String name) {
+// фильтр
+			//TODO дискриминация
+			//TODO классификация
+			//TODO упоковать в map
+			return null;
+		}
+
+
 	@GetMapping("/CounttableJsoup")
 	public String counttables(@RequestParam(value = "url", defaultValue = "https://example.com") String url) throws Exception {
 
@@ -47,15 +52,23 @@ public class DemoApplication {
 		String htmlResource = GetHTMLCode.getHtmlResourceByURL(url,"UTF-8"); //Получаем код со страницы
 
 		Document document = Jsoup.parse(htmlResource);
-//Элементс главнй класс jsoup
+//Element главнй класс jsoup
 
 	//	System.out.println(htmlResource); //Вывод HTML кода в консоль
 
 		Elements tables = document.getElementsByTag("table");
 //Elements Наследует ArrayList так шо здесь у нас список тэйблов
+
 		System.out.println("\nРАЗДЕЛЕНИЕ");
+
 		//getAllElements выбирает все дочерние элементы и дочерние элементы дочерних элементов
-//		System.out.println(tables.get(0));
+		System.out.println("\nввывод всех таблиц кода");
+		System.out.println(tables.size());
+
+		System.out.println("\nввывод всех отфильтровнных таблиц");
+		System.out.println(FIlter.FilterForTable(tables));
+		System.out.println("\n" + FIlter.FilterForTable(tables).size());
+
 
 //		Table tableExample = ElementToTable.transfer(tables.get(0),url);
 	//	System.out.println(tables.get(0));
@@ -73,9 +86,11 @@ public class DemoApplication {
 //			System.out.println(ex.getMessage());
 //		}
 
-
-		int count = doc.getElementsByTag("table").size(); //подсчет колличества тегов <table>
+		int count = tables.size(); //подсчет колличества тегов <table>
 		return String.format("Кол - во тегов " + count+ "\n" );
+
+
+
 
 	}
 }
