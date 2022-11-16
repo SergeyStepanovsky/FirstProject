@@ -1,0 +1,11 @@
+Gson gson = new GsonBuilder()
+//				.setPrettyPrinting()
+//				.create();
+//
+//		try(FileWriter writer = new FileWriter("TableToJson.json", false))
+//		{
+//			writer.write(gson.toJson(tableExample));
+//		}
+//		catch(IOException ex){
+//			System.out.println(ex.getMessage());
+//		}
